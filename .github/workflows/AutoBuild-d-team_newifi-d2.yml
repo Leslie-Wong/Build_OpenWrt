@@ -17,7 +17,7 @@ on:
         default: 'false'
       DEFAULT_TARGET:
         description: '设备名称 [必选]'
-        default: 'x86_64'
+        default: 'd-team_newifi-d2'
       DEFAULT_SOURCE:
         description: '源码:分支 [必选]'
         default: 'coolsnowwolf/lede:master'
