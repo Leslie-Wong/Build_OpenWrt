@@ -55,11 +55,11 @@ jobs:
         DEFAULT_SOURCE=${{ github.event.inputs.DEFAULT_SOURCE }}
         DELETE_USELESS_FILES=${{ github.event.inputs.DELETE_USELESS_FILES }}
         echo "DEFAULT_TARGET=$DEFAULT_TARGET" >> $GITHUB_ENV
-        echo "DELETE_USELESS_FILES=$DELETE_USELESS_FILES" >> $GITHUB_ENV
-        [ ! -f "$GITHUB_WORKSPACE/Configs/$DEFAULT_TARGET" ] && {
-            echo "[ERROR] No target_config file: [$DEFAULT_TARGET] detected!"
-            exit 1
-        }
+        #echo "DELETE_USELESS_FILES=$DELETE_USELESS_FILES" >> $GITHUB_ENV
+        #[ ! -f "$GITHUB_WORKSPACE/Configs/$DEFAULT_TARGET" ] && {
+        #    echo "[ERROR] No target_config file: [$DEFAULT_TARGET] detected!"
+        #    exit 1
+        #}
         export REPO_URL="https://github.com/$(echo $DEFAULT_SOURCE | cut -d \: -f 1)"
         export REPO_BRANCH=$(echo $DEFAULT_SOURCE | cut -d \: -f 2)
         [ -z $REPO_BRANCH ] && REPO_BRANCH=master
