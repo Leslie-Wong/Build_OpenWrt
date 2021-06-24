@@ -125,6 +125,10 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        
+    - name: Add Custom Settings
+      run: |
+        cp -rf OpenWrt_Perset_Files/settings/* ./openwrt/
 
     - name: Compile
       run: |
