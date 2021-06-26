@@ -10,7 +10,7 @@ name: AutoBuild-newifi-d2
 ### 以下内容请保持不变
 on:
   schedule:
-    - cron: 45 14 * * *
+    - cron: 58 14 * * *
     
   repository_dispatch:
   workflow_dispatch:
@@ -22,9 +22,6 @@ on:
       DEFAULT_TARGET:
         description: '设备名称 [必选]'
         default: 'd-team_newifi-d2'
-      DEFAULT_SOURCE:
-        description: '源码:分支 [必选]'
-        default: 'coolsnowwolf/lede:master'
       IP:
         description: '固件 IP 地址 [可选]'
         default: ''
@@ -35,8 +32,7 @@ on:
 
 ### 环境变量设置
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  DEFAULT_SOURCE: 'coolsnowwolf/lede:master'
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
 # 上传固件到 Github Releases
