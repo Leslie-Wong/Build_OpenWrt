@@ -10,7 +10,7 @@ name: AutoBuild-newifi-d2
 ### 以下内容请保持不变
 on:
   schedule:
-    - cron: 52 14 * * *
+    - cron: 9 16 * * *
     
   repository_dispatch:
   workflow_dispatch:
