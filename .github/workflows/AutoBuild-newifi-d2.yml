@@ -35,6 +35,8 @@ on:
 
 ### 环境变量设置
 env:
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
 # 上传固件到 Github Releases
   UPLOAD_RELEASES: true
 # 上传固件到 Github Artifacts
@@ -42,7 +44,10 @@ env:
 # 上传 bin 文件夹到 Github Artifacts
   UPLOAD_BIN_ARTIFACTS: true
 # 删除早期的 workflow 任务
-  DELETE_OLD_WORKFLOW: true
+  REMOVE_OLD_RELEASE: true
+  REMOVE_WORKFLOW_RUNS: true
+# Name for upload to Release
+  UPLOAD_RELEASE_NAME: Newifi-3_AutoBuild
 ### END
 
 jobs:
@@ -104,7 +109,7 @@ jobs:
         
     - name: Clone Openwrt Source Code
       run: |
-        git clone -b $REPO_BRANCH $REPO_URL openwrt
+        git clone https://github.com/coolsnowwolf/lede:master openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall.git' feeds.conf.default
@@ -145,11 +150,43 @@ jobs:
         make -j$(nproc) || make -j1 V=s
         [ $? == 0 ] && Compile_Result=true
         echo "Compile_Result=$Compile_Result" >> $GITHUB_ENV
+        
+    - name: Zip files
+      run: |
+        echo "FILE_DATE=_$(date +"%Y%m%d_%H%M")" >> $GITHUB_ENV
+        mkdir upload_file_${{ env.FILE_DATE }}
+        cd openwrt/bin
+        tar -zcvf upload_file_${{ env.FILE_DATE }}/packages_${{ env.FILE_DATE }}.tar.gz packages
+        tar -zcvf upload_file_${{ env.FILE_DATE }}/targets_${{ env.FILE_DATE }}.tar.gz targets
+        # cp -rf packages ${{ env.UPLOAD_RELEASE_NAME }}${{ env.FILE_DATE }}
+        cp -rf openwrt/bin/Firmware/* upload_file_${{ env.FILE_DATE }}
+        cd $GITHUB_WORKSPACE/upload_file_${{ env.FILE_DATE }}
+        echo "UPLOADFILES=$PWD" >> $GITHUB_ENV
+        
+    - name: Upload firmware to cowtransfer
+      id: cowtransfer
+      if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 64 --no-progress upload_file_${{ env.FILE_DATE }} 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+        
+    - name: Upload firmware to WeTransfer
+      id: wetransfer
+      if: env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress upload_file_${{ env.FILE_DATE }} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+        
     - name: Process Firmware
       if: env.Compile_Result == 'true' && !cancelled()
       run: |
         cd openwrt
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh && PS_Firmware
+        
     - name: Upload Firmware to Artifacts
       uses: actions/upload-artifact@main
       if: env.UPLOAD_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
@@ -157,6 +194,16 @@ jobs:
         name: ${{ env.DEFAULT_TARGET }}_${{ env.REPO_BRANCH }}_firmware_${{ env.Artifacts_Date }}
         path: openwrt/bin/Firmware
 
+    - name: Generate release tag
+      id: tag
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "::set-output name=release_tag::${{ env.UPLOAD_RELEASE_NAME }}${{ env.FILE_DATE }}"
+        touch release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "::set-output name=status::success"
+        
     - name: Upload bin to Artifacts
       uses: actions/upload-artifact@main
       if: env.UPLOAD_BIN_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
@@ -171,12 +218,21 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: AutoUpdate
-        body_path: Release_info
+        body_path: release.txt
         files: openwrt/bin/Firmware/*
 
-    - name: Delete old Workflow Runs
-      uses: GitRML/delete-workflow-runs@main
-      if: env.DELETE_OLD_WORKFLOW == 'true' && !cancelled()
+    - name: Remove old Release
+      uses: dev-drprasad/delete-older-releases@v0.1.0
+      if: env.REMOVE_OLD_RELEASE == 'true' && !cancelled()
       with:
-        retain_days: 1
-        keep_minimum_runs: 3
+        keep_latest: 30
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        
+    - name: Remove workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      if: env.REMOVE_WORKFLOW_RUNS == 'true' && !cancelled()
+      with:
+        retain_days: 11
+        keep_minimum_runs: 10
