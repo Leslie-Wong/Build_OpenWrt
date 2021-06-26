@@ -107,7 +107,7 @@ jobs:
         
     - name: Clone Openwrt Source Code
       run: |
-        git clone https://github.com/coolsnowwolf/lede:master openwrt
+        git clone -b $REPO_BRANCH $REPO_URL openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall.git' feeds.conf.default
