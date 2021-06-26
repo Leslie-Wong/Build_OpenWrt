@@ -10,7 +10,7 @@ name: AutoBuild-newifi-d2
 ### 以下内容请保持不变
 on:
   schedule:
-    - cron: 30 15 * * *
+    - cron: 52 14 * * *
     
   repository_dispatch:
   workflow_dispatch:
@@ -19,9 +19,6 @@ on:
         description: 'SSH 连接到 Actions'
         required: true
         default: 'false'
-      DEFAULT_TARGET:
-        description: '设备名称 [必选]'
-        default: 'd-team_newifi-d2'
       IP:
         description: '固件 IP 地址 [可选]'
         default: ''
@@ -32,7 +29,9 @@ on:
 
 ### 环境变量设置
 env:
-  DEFAULT_SOURCE: 'coolsnowwolf/lede:master'
+  DEFAULT_TARGET: d-team_newifi-d2
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
 # 上传固件到 Github Releases
@@ -63,12 +62,12 @@ jobs:
         DELETE_USELESS_FILES=${{ github.event.inputs.DELETE_USELESS_FILES }}
         echo "DEFAULT_TARGET=$DEFAULT_TARGET" >> $GITHUB_ENV
         echo "DELETE_USELESS_FILES=$DELETE_USELESS_FILES" >> $GITHUB_ENV
-        export REPO_URL="https://github.com/$(echo $DEFAULT_SOURCE | cut -d \: -f 1)"
-        export REPO_BRANCH=$(echo $DEFAULT_SOURCE | cut -d \: -f 2)
-        [ -z $REPO_BRANCH ] && REPO_BRANCH=master
-        echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
-        echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
-        echo -e "TARGET_PROFILE: $DEFAULT_TARGET\nSOURCE: $REPO_URL:$REPO_BRANCH"
+        #export REPO_URL="https://github.com/$(echo $DEFAULT_SOURCE | cut -d \: -f 1)"
+        #export REPO_BRANCH=$(echo $DEFAULT_SOURCE | cut -d \: -f 2)
+        #[ -z $REPO_BRANCH ] && REPO_BRANCH=master
+        #echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
+        #echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
+        #echo -e "TARGET_PROFILE: $DEFAULT_TARGET\nSOURCE: $REPO_URL:$REPO_BRANCH"
     - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
