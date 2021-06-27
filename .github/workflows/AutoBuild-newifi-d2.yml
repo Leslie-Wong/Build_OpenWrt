@@ -10,7 +10,7 @@ name: AutoBuild-newifi-d2
 ### 以下内容请保持不变
 on:
   schedule:
-    - cron: 28 16 * * *
+    - cron: 30 22 * * *
     
   repository_dispatch:
   workflow_dispatch:
@@ -120,6 +120,11 @@ jobs:
         Firmware-Diy_Base
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE_Sec && Firmware-Diy
         rm -f .config && cp $GITHUB_WORKSPACE/Configs/$DEFAULT_TARGET .config
+        
+    - name: Add jd-dailybonus
+      run: |
+        cd openwrt/package/lean/
+        git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git
         
     - name: SSH Connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
