@@ -121,11 +121,6 @@ jobs:
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE_Sec && Firmware-Diy
         rm -f .config && cp $GITHUB_WORKSPACE/Configs/$DEFAULT_TARGET .config
         
-    - name: Add jd-dailybonus
-      run: |
-        cd openwrt/package/lean/
-        git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git
-        
     - name: SSH Connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.SSH == 'true' && github.event.inputs.SSH  != 'false') || contains(github.event.action, 'SSH')
