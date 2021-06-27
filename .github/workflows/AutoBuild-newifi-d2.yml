@@ -21,7 +21,7 @@ on:
         default: 'false'
       IP:
         description: '固件 IP 地址 [可选]'
-        default: ''
+        default: '192.168.10.1'
       DELETE_USELESS_FILES:
         description: '清理无用文件 [可选]'
         default: 'true'
