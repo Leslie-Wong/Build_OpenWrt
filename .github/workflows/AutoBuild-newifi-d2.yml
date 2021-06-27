@@ -10,7 +10,7 @@ name: AutoBuild-newifi-d2
 ### 以下内容请保持不变
 on:
   schedule:
-    - cron: 30 22 * * *
+    - cron: 30 2 * * *
     
   repository_dispatch:
   workflow_dispatch:
@@ -208,7 +208,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
         tag_name: AutoUpdate
         body_path: release.txt
@@ -221,7 +221,7 @@ jobs:
         keep_latest: 30
         delete_tags: true
       env:
-        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
         
     - name: Remove workflow runs
       uses: GitRML/delete-workflow-runs@main
