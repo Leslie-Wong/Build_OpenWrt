@@ -45,6 +45,8 @@ env:
   REMOVE_WORKFLOW_RUNS: true
 # Name for upload to Release
   UPLOAD_RELEASE_NAME: Newifi-3_AutoBuild
+  FILE_DATE: $(date +"%Y%m%d_%H%M")
+  
 ### END
 
 jobs:
@@ -68,7 +70,6 @@ jobs:
         #echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
         #echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
         echo -e "TARGET_PROFILE: $DEFAULT_TARGET\nSOURCE: $REPO_URL:$REPO_BRANCH"
-        echo "FILE_DATE=$(date +"%Y%m%d_%H%M")" >> $GITHUB_ENV
         echo "${{ env.FILE_DATE }}"
         
     - name: Initialization Environment
