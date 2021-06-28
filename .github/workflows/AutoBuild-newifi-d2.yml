@@ -70,7 +70,8 @@ jobs:
         #echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
         #echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
         echo -e "TARGET_PROFILE: $DEFAULT_TARGET\nSOURCE: $REPO_URL:$REPO_BRANCH"
-        echo "${{ env.FILE_DATE }}"
+        echo "env.FILE_DATE ${{ env.FILE_DATE }}"
+        echo -e "FILE_DATE: $FILE_DATE"
         
     - name: Initialization Environment
       env:
