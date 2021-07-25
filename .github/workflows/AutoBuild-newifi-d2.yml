@@ -32,6 +32,7 @@ env:
   DEFAULT_TARGET: d-team_newifi-d2
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
+  CONFIG_FILE: Newifi_3_Build
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
 # 上传固件到 Github Releases
@@ -124,7 +125,7 @@ jobs:
     - name: Run AutoBuild_DiyScript.sh
       run: |
         chmod +x Scripts/AutoBuild_*.sh
-        cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE openwrt/.config
+        cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
         cd openwrt
         make defconfig > /dev/null 2>&1
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_DiyScript.sh
