@@ -132,7 +132,7 @@ jobs:
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware-Diy_Main
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE && Firmware-Diy
-        rm -f .config && cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE .config
+        #rm -f .config && cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE .config
         
     - name: SSH Connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
