@@ -149,7 +149,7 @@ jobs:
       run: |
         export Compile_Result=false
         cd openwrt
-        source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh && $GITHUB_WORKSPACE/Other_Scripts
+        source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh && Firmware-Diy_Other
         rm -rf ./tmp && ./scripts/feeds install -a > /dev/null 2>&1
         make defconfig
         make download -j$(nproc)
