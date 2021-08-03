@@ -205,10 +205,10 @@ jobs:
       if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
       run: |
         echo "::set-output name=release_tag::${{ env.UPLOAD_RELEASE_NAME }}_${{ env.FILE_DATE }}"
-        touch release_${{ env.FILE_DATE }}.txt
-        echo "${{ env.FILE_DATE }}:" >> release_${{ env.FILE_DATE }}.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release_${{ env.FILE_DATE }}.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release_${{ env.FILE_DATE }}.txt
+        touch release.txt
+        echo "${{ env.FILE_DATE }}:" >> release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
         
     - name: Upload bin to Artifacts
@@ -225,7 +225,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
         tag_name: ${{ env.UPLOAD_RELEASE_NAME }}_${{ env.FILE_DATE }}
-        body_path: release_${{ env.FILE_DATE }}.txt
+        body_path: release.txt
         files: openwrt/bin/Firmware/*
 
     - name: Remove old Release
