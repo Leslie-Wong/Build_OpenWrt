@@ -224,7 +224,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
-        tag_name: ${{ env.UPLOAD_RELEASE_NAME }}_${{ env.FILE_DATE }}
+        tag_name: "${{ env.UPLOAD_RELEASE_NAME }}_${{ env.FILE_DATE }}"
         body_path: release.txt
         files: openwrt/bin/Firmware/*
 
