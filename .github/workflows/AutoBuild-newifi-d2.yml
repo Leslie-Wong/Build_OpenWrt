@@ -225,7 +225,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
-        tag_name: ${{ steps.vars.outputs.release_tag }}
+        tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: openwrt/bin/Firmware/*
 
