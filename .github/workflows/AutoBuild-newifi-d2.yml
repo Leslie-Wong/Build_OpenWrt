@@ -131,7 +131,7 @@ jobs:
     - name: Run AutoBuild_DiyScript.sh
       run: |
         chmod +x Scripts/AutoBuild_*.sh
-        cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE openwrt/.config
+        cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
         cd openwrt
         make defconfig > /dev/null 2>&1
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_DiyScript.sh
