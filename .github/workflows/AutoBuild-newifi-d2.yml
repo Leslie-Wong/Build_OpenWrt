@@ -30,8 +30,9 @@ on:
 ### 环境变量设置
 env:
   DEFAULT_TARGET: d-team_newifi-d2
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  DEFAULT_SOURCE: coolsnowwolf/lede:master
+  # REPO_URL: https://github.com/coolsnowwolf/lede
+  # REPO_BRANCH: master
   CONFIG_FILE: Newifi_3_Build
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
@@ -47,6 +48,8 @@ env:
 # Name for upload to Release
   UPLOAD_RELEASE_NAME: Newifi-3_AutoBuild
   FILE_DATE: $(date +"%Y%m%d_%H%M")
+# 删除无用文件以增加编译空间
+  DELETE_USELESS_FILES: true
   
 ### END
 
@@ -60,29 +63,31 @@ jobs:
 
     - name: Initialization Define Info
       run: |
-        # DEFAULT_TARGET=${{ github.event.inputs.DEFAULT_TARGET }}
-        # DEFAULT_SOURCE=${{ github.event.inputs.DEFAULT_SOURCE }}
-        DELETE_USELESS_FILES=${{ github.event.inputs.DELETE_USELESS_FILES }}
-        # echo "DEFAULT_TARGET=$DEFAULT_TARGET" >> $GITHUB_ENV
+        CONFIG_FILE=${{ env.CONFIG_FILE }}
+        DEFAULT_SOURCE=${{ env.DEFAULT_SOURCE }}
+        DELETE_USELESS_FILES=${{ env.DELETE_USELESS_FILES }}
+        echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
         echo "DELETE_USELESS_FILES=$DELETE_USELESS_FILES" >> $GITHUB_ENV
-        #export REPO_URL="https://github.com/$(echo $DEFAULT_SOURCE | cut -d \: -f 1)"
-        #export REPO_BRANCH=$(echo $DEFAULT_SOURCE | cut -d \: -f 2)
-        #[ -z $REPO_BRANCH ] && REPO_BRANCH=master
-        #echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
-        #echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
-        echo -e "TARGET_PROFILE: $DEFAULT_TARGET\nSOURCE: $REPO_URL:$REPO_BRANCH"
+        [ ! -f "$GITHUB_WORKSPACE/Configs/$CONFIG_FILE" ] && {
+            echo "Config_File: [/Config/$CONFIG_FILE] is not detected!"
+            exit 1
+        }
+        export REPO_URL="https://github.com/$(echo $DEFAULT_SOURCE | cut -d \: -f 1)"
+        export REPO_BRANCH=$(echo $DEFAULT_SOURCE | cut -d \: -f 2)
+        [ -z $REPO_BRANCH ] && REPO_BRANCH=master
+        echo "REPO_URL=$REPO_URL" >> $GITHUB_ENV
+        echo "REPO_BRANCH=$REPO_BRANCH" >> $GITHUB_ENV
         
     - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get update
-        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync qemu-utils
+        sudo -E apt-get -y install build-essential cmake asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libreadline-dev libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint ccache curl wget vim nano python2.7 python3 python3-pip python3-ply haveged lrzsz device-tree-compiler scons antlr3 gperf intltool mkisofs rsync
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
         if [ "$DELETE_USELESS_FILES" == true ];then
-            echo "Deleting useless files,please wait ..."
             docker rmi $(docker images -q)
             sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php
             sudo -E apt-get -y autoremove --purge
@@ -90,10 +95,9 @@ jobs:
         fi
         echo "Compile_Date=$(date +%Y%m%d%H%M)" > $GITHUB_WORKSPACE/Openwrt.info
         echo "Display_Date=$(date +%Y/%m/%d)" >> $GITHUB_WORKSPACE/Openwrt.info
-        echo "Defined_IP_Address=${{ github.event.inputs.IP }}" >> $GITHUB_WORKSPACE/Openwrt.info
-        echo "Openwrt_Repo=$REPO_URL" >> $GITHUB_WORKSPACE/Openwrt.info
+        echo "Before_IP_Address=${{ github.event.inputs.IP }}" >> $GITHUB_WORKSPACE/Openwrt.info
+        echo "Openwrt_Repository=$REPO_URL" >> $GITHUB_WORKSPACE/Openwrt.info
         echo "Artifacts_Date=$(date +%m%d%H%M)" >> $GITHUB_ENV
-        touch Release_info
 
     - name: Clone Build Script
       run: |
