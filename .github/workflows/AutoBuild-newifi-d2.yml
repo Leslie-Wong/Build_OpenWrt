@@ -128,17 +128,24 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
-    - name: Run AutoBuild_DiyScript.sh
+    - name: Run AutoBuild_DiyScript.sh 1/4
       run: |
         chmod -R 777 $GITHUB_WORKSPACE/Scripts/
         cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
-        cd openwrt
+        cd $GITHUB_WORKSPACE/openwrt
         make defconfig > /dev/null 2>&1
+      
+    - name: Run AutoBuild_DiyScript.sh 2/4
+      run: |
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_DiyScript.sh
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
-        echo `date '+%Y-%m-%d %H:%M:%S'`
+        
+    - name: Run AutoBuild_DiyScript.sh 3/4
+      run: |
         Firmware-Diy_Main
-        echo `date '+%Y-%m-%d %H:%M:%S'`
+    
+    - name: Run AutoBuild_DiyScript.sh 4/4
+      run: |
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE && Firmware-Diy
         
     - name: SSH Connection to Actions
