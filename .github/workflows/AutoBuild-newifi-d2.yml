@@ -142,7 +142,7 @@ jobs:
         
     - name: Run AutoBuild_DiyScript.sh 1.4/4
       run: |
-        make defconfig > /dev/null 2>&1
+        make defconfig
       
     - name: Run AutoBuild_DiyScript.sh 2/4
       run: |
