@@ -137,6 +137,9 @@ jobs:
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware-Diy_Main
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE && Firmware-Diy
+      
+    - name: Run Copy Config File
+      run: |
         cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
         
     - name: SSH Connection to Actions
