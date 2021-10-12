@@ -131,16 +131,18 @@ jobs:
     - name: Run AutoBuild_DiyScript.sh
       run: |
         chmod +x Scripts/AutoBuild_*.sh
+        cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE openwrt/.config
         cd openwrt
         make defconfig > /dev/null 2>&1
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_DiyScript.sh
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware-Diy_Main
         source $GITHUB_WORKSPACE/openwrt/VARIABLE_FILE && Firmware-Diy
+        rm -f .config && cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE .config
       
-    - name: Run Copy Config File
-      run: |
-        cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
+#     - name: Run Copy Config File
+#       run: |
+#         cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
         
     - name: SSH Connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
