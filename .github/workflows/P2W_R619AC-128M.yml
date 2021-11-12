@@ -177,7 +177,7 @@ jobs:
         cd openwrt/bin
         tar -zcvf ../../upload_files/packages_${{ env.FILE_DATE }}.tar.gz packages
         tar -zcvf ../../upload_files/targets_${{ env.FILE_DATE }}.tar.gz targets
-        cp -rf targets/ramips/mt7621/* ../../upload_files
+        cp -rf targets/ipq40xx/generic/* ../../upload_files
         cd $GITHUB_WORKSPACE/upload_files
         echo "UPLOADFILES=$PWD" >> $GITHUB_ENV
         
