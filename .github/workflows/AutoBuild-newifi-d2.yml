@@ -110,7 +110,7 @@ jobs:
         # sed -i 's/smartdns kenzok8/smartdns liuran001/g' Scripts/AutoBuild_ExtraPackages.sh
         # sed -i 's/-${CURRENT_Version}-${FW_Boot_Type}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}-${FW_Boot_Type}/g' Scripts/AutoBuild_Function.sh
         # sed -i 's/-${CURRENT_Version}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}/g' Scripts/AutoBuild_Function.sh
-        cp -rf ConfigFiles/Newifi_3_Build Configs/d-team_newifi-d2
+        cp -rf ConfigFiles/$DEFAULT_TARGET Configs/$CONFIG_FILE
         
     - name: Clone Openwrt Source Code
       run: |
@@ -138,7 +138,7 @@ jobs:
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_DiyScript.sh
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware_Diy_Before
-        rm .config && cp $GITHUB_WORKSPACE/Configs/$DEFAULT_TARGET .config
+        rm .config && cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE .config
         Firmware_Diy_Main
         Firmware_Diy
       
