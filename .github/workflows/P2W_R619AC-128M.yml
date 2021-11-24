@@ -202,21 +202,21 @@ jobs:
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
         
     - name: Process Firmware
-      if: env.Compile_Result == 'true' && !cancelled()
+      if: env.Result == 'true' && !cancelled()
       run: |
         cd openwrt
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh && Firmware-Diy_End
         
     - name: Upload Firmware to Artifacts
       uses: actions/upload-artifact@main
-      if: env.UPLOAD_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
+      if: env.UPLOAD_ARTIFACTS == 'true' && env.Result == 'true' && !cancelled()
       with:
         name: ${{ env.DEFAULT_TARGET }}_${{ env.REPO_BRANCH }}_firmware_${{ env.Artifacts_Date }}
         path: openwrt/bin/Firmware
 
     - name: Generate release tag
       id: tag
-      if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
+      if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       run: |
         echo "::set-output name=release_tag::${{ env.UPLOAD_RELEASE_NAME }}_${{ env.FILE_DATE }}"
         touch release.txt
@@ -227,14 +227,14 @@ jobs:
         
     - name: Upload bin to Artifacts
       uses: actions/upload-artifact@main
-      if: env.UPLOAD_BIN_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
+      if: env.UPLOAD_BIN_ARTIFACTS == 'true' && env.Result == 'true' && !cancelled()
       with:
         name: ${{ env.DEFAULT_TARGET }}_${{ env.REPO_BRANCH }}_bin_${{ env.Artifacts_Date }}
         path: openwrt/bin
 
     - name: Upload Firmware to Github Releases
       uses: softprops/action-gh-release@v1
-      if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
+      if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
