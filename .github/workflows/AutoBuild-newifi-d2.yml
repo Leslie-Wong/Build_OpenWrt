@@ -233,15 +233,32 @@ jobs:
         path: openwrt/bin
 
     - name: Upload Firmware to Github Releases
-      uses: softprops/action-gh-release@v1
+      uses: svenstaro/upload-release-action@v2
       if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.OPENWRT_TOKEN }}
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
+        repo_token: ${{ secrets.OPENWRT_TOKEN }}
         body_path: release.txt
-        files: openwrt/bin/Firmware/*
-
+        file: openwrt/bin/Firmware/*
+        file_glob: true
+        tag: AutoUpdate
+        overwrite: true
+        
+    - name: Download Github Release API
+      if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
+      run: |
+        wget https://api.github.com/repos/${{github.repository}}/releases/tags/AutoUpdate -O API
+        
+    - name: Upload API to Github Release
+      if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.OPENWRT_TOKEN }}
+        file: ./API
+        file_glob: true
+        tag: ${{ steps.tag.outputs.release_tag }}
+        overwrite: true
+        
     - name: Remove old Release
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.REMOVE_OLD_RELEASE == 'true' && !cancelled()
