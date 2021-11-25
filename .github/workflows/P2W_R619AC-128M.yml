@@ -205,7 +205,8 @@ jobs:
       if: env.Result == 'true' && !cancelled()
       run: |
         cd openwrt
-        source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh && Firmware-Diy_End
+        source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
+        Firmware_Diy_End
         
     - name: Upload Firmware to Artifacts
       uses: actions/upload-artifact@main
