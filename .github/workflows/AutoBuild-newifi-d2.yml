@@ -238,7 +238,7 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         repo_token: ${{ secrets.OPENWRT_TOKEN }}
-        body_path: release.txt
+        body: $(<release.txt)
         file: openwrt/bin/Firmware/*
         file_glob: true
         tag: AutoUpdate
