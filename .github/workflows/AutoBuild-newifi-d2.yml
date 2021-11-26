@@ -236,12 +236,11 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
         repo_token: ${{ secrets.OPENWRT_TOKEN }}
         body: $(<release.txt)
         file: openwrt/bin/Firmware/*
         file_glob: true
-        tag: AutoUpdate
+        tag: ${{ steps.tag.outputs.release_tag }}
         overwrite: true
         
     - name: Download Github Release API
