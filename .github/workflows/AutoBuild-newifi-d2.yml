@@ -63,10 +63,10 @@ jobs:
 
     - name: Initialization Define Info
       run: |
-        #CONFIG_FILE=${{ env.CONFIG_FILE }}
+        CONFIG_FILE=${{ env.CONFIG_FILE }}
         DEFAULT_SOURCE=${{ env.DEFAULT_SOURCE }}
         DELETE_USELESS_FILES=${{ env.DELETE_USELESS_FILES }}
-        #echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
+        echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
         echo "DELETE_USELESS_FILES=$DELETE_USELESS_FILES" >> $GITHUB_ENV
         #[ ! -f "$GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE" ] && {
         #    echo "Config_File: [/ConfigFiles/$CONFIG_FILE] is not detected!"
@@ -107,6 +107,7 @@ jobs:
         cd ../
         sed -i 's/Author=Hyy2001/Author=LesLie.W/g' Scripts/AutoBuild_DiyScript.sh
         sed -i 's/INCLUDE_AutoBuild_Features=true/INCLUDE_AutoBuild_Features=false/g' Scripts/AutoBuild_DiyScript.sh
+        sed -i 's/Firmware_Path="${Home}\/bin\/targets\/${TARGET_BOARD}\/${TARGET_SUBTARGET}"/Firmware_Path="${Home}\/bin\/targets\/*\/*"/g' Scripts/AutoBuild_Function.sh
         # sed -i 's/smartdns kenzok8/smartdns liuran001/g' Scripts/AutoBuild_ExtraPackages.sh
         # sed -i 's/-${CURRENT_Version}-${FW_Boot_Type}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}-${FW_Boot_Type}/g' Scripts/AutoBuild_Function.sh
         # sed -i 's/-${CURRENT_Version}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}/g' Scripts/AutoBuild_Function.sh
