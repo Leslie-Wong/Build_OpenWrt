@@ -245,7 +245,7 @@ jobs:
       if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       with:
         repo_token: ${{ secrets.OPENWRT_TOKEN }}
-        body: env.RELEASE_BODY
+        body: "$(cat release.txt)"
         file: openwrt/bin/Firmware/*
         file_glob: true
         tag: ${{ steps.tag.outputs.release_tag }}
