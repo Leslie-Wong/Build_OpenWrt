@@ -221,6 +221,7 @@ jobs:
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
+        echo "RELEASE_BODY=$(cat release.txt)" >> $GITHUB_ENV
         
     - name: Upload bin to Artifacts
       uses: actions/upload-artifact@main
@@ -244,7 +245,7 @@ jobs:
       if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       with:
         repo_token: ${{ secrets.OPENWRT_TOKEN }}
-        body: $(<release.txt)
+        body: env.RELEASE_BODY
         file: openwrt/bin/Firmware/*
         file_glob: true
         tag: ${{ steps.tag.outputs.release_tag }}
