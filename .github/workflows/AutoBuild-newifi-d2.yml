@@ -245,7 +245,7 @@ jobs:
       id: read_release
       shell: bash
       run: |
-        r=$(cat src/release.txt)
+        r=$(cat release.txt)
         r="${r//'%'/'%25'}"
         r=[ $UPLOAD_COWTRANSFER = true ] && "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})"
         r=[ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})"
