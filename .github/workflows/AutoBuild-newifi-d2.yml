@@ -241,12 +241,22 @@ jobs:
     #         body_path: release.txt
     #         files: openwrt/bin/Firmware/*
     
+    - name: Read release body
+      id: read_release
+      shell: bash
+      run: |
+        r=$(cat src/release.txt)
+        r="${r//'%'/'%25'}"
+        r=[ $UPLOAD_COWTRANSFER = true ] && "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})"
+        r=[ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})"
+        echo "::set-output name=RELEASE_BODY::$r"
+          
     - name: Upload Firmware to Github Release
       uses: svenstaro/upload-release-action@v2
       if: env.UPLOAD_RELEASES == 'true' && env.Result == 'true' && !cancelled()
       with:
         repo_token: ${{ secrets.OPENWRT_TOKEN }}
-        body: ${{ steps.tag.outputs.release_body }}
+        body: ${{ steps.read_release.outputs.RELEASE_BODY }}
         file: openwrt/bin/Firmware/*
         file_glob: true
         tag: ${{ steps.tag.outputs.release_tag }}
