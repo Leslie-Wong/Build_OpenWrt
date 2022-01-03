@@ -246,8 +246,7 @@ jobs:
       shell: bash
       run: |
         r="${{ env.FILE_DATE }}:"
-        r="🔗 Cowtransfer => ${{ steps.cowtransfer.outputs.url }}"
-        r="🔗 WeTransfer => ${{ steps.wetransfer.outputs.url }}"
+        r="<p>$r</p><p>🔗 Cowtransfer => ${{ steps.cowtransfer.outputs.url }} </p><p>🔗 WeTransfer => ${{ steps.wetransfer.outputs.url }}</p>"
         echo "::set-output name=RELEASE_BODY::$r"
           
     - name: Upload Firmware to Github Release
