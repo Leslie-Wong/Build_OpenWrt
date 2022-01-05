@@ -243,7 +243,7 @@ jobs:
       id: read_release
       shell: bash
       run: |
-        r='<p>🔔 [Cowtransfer] => <a href="${{ steps.cowtransfer.outputs.url }}" target="_blank" ><span class="px-1 text-bold">🔗</span></a> </p><p>🔔 [WeTransfer] <a href="${{ steps.wetransfer.outputs.url }}" target="_blank" ><span class="px-1 text-bold">🔗</span></a></p>'
+        r='<div>🎉🎉🎉🎉🎉🎉🎉🎉</div><p>🔔 [🌈Cowtransfer⭐] => <a href="${{ steps.cowtransfer.outputs.url }}" target="_blank" ><span class="px-1 text-bold">🔗</span></a> </p><p>🔔 [🌈WeTransfer⭐] <a href="${{ steps.wetransfer.outputs.url }}" target="_blank" ><span class="px-1 text-bold">🔗</span></a></p>'
         echo "::set-output name=RELEASE_BODY::$r"
     
     - name: Upload Firmware to Github Release
