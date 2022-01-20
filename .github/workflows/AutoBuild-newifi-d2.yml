@@ -56,8 +56,16 @@ env:
 jobs:
   Compile:
     runs-on: ubuntu-latest
-
+    
     steps:
+    - name: Maximize Build Space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 5120
+        swap-size-mb: 512
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        
     - name: Checkout
       uses: actions/checkout@main
 
@@ -111,7 +119,7 @@ jobs:
         # sed -i 's/smartdns kenzok8/smartdns liuran001/g' Scripts/AutoBuild_ExtraPackages.sh
         # sed -i 's/-${CURRENT_Version}-${FW_Boot_Type}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}-${FW_Boot_Type}/g' Scripts/AutoBuild_Function.sh
         # sed -i 's/-${CURRENT_Version}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}/g' Scripts/AutoBuild_Function.sh
-        cp -rf ConfigFiles/$DEFAULT_TARGET Configs/$CONFIG_FILE
+        
         
     - name: Clone Openwrt Source Code
       run: |
@@ -120,11 +128,12 @@ jobs:
         cd openwrt
         sed -i '$a src-git passwall https://github.com/xiaorouji/openwrt-passwall.git' feeds.conf.default
         ./scripts/feeds update -a
-        ./scripts/feeds install -a > /dev/null 2>&1
+        ./scripts/feeds install -a
 
     - name: Run AutoBuild_DiyScript.sh
       run: |
         chmod +x Scripts/AutoBuild_*.sh
+        cp -rf ConfigFiles/$DEFAULT_TARGET Configs/$CONFIG_FILE
         cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE openwrt/.config
         cd openwrt
         make defconfig
