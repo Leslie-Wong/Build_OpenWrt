@@ -80,14 +80,6 @@ jobs:
         else
             CONFIG_FILE=${{ env.CONFIG_FILE }}
         fi
-        if [ ! -f "$GITHUB_WORKSPACE/Configs/$CONFIG_FILE" ]
-        then
-            echo "CONFIG_FILE: [/Config/$CONFIG_FILE] is not detected !"
-            exit 1
-        else
-            echo "CONFIG_FILE: [/Config/$CONFIG_FILE]"
-            echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
-        fi
         if [ -n "${{ github.event.inputs.Tempoary_IP }}" ]
         then
             echo "IP: [${{ github.event.inputs.Tempoary_IP }}]"
@@ -137,6 +129,18 @@ jobs:
         # sed -i 's/-${CURRENT_Version}-${FW_Boot_Type}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}-${FW_Boot_Type}/g' Scripts/AutoBuild_Function.sh
         # sed -i 's/-${CURRENT_Version}-$(Get_SHA256 $1).${Firmware_Format_Defined}/-${CURRENT_Version}/g' Scripts/AutoBuild_Function.sh
 
+    - name: Initialization Variables 2
+      run: |
+      
+        if [ ! -f "$GITHUB_WORKSPACE/Configs/$CONFIG_FILE" ]
+        then
+            echo "CONFIG_FILE: [/Config/$CONFIG_FILE] is not detected !"
+            exit 1
+        else
+            echo "CONFIG_FILE: [/Config/$CONFIG_FILE]"
+            echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
+        fi
+        
     - name: Clone Openwrt Source Code
       run: |
         git clone -b $REPO_BRANCH $REPO_URL openwrt
