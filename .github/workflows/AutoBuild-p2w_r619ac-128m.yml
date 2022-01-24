@@ -11,6 +11,10 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
+      SSH:
+        description: 'SSH 连接到 Actions'
+        required: true
+        default: 'false'
       Tempoary_IP:
         description: '固件 IP 地址 [可选]'
         default: ''
@@ -160,7 +164,15 @@ jobs:
         Firmware_Diy_Before
         rm .config && cp $GITHUB_WORKSPACE/Configs/$CONFIG_FILE .config
         Firmware_Diy_Main
-        Firmware_Diy
+        #Firmware_Diy
+    
+    - name: SSH Connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.SSH == 'true' && github.event.inputs.SSH  != 'false') || contains(github.event.action, 'SSH')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        
 
     - name: Compile
       run: |
