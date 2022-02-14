@@ -34,8 +34,8 @@ env:
   # REPO_URL: https://github.com/coolsnowwolf/lede
   # REPO_BRANCH: master
   CONFIG_FILE: p2w_r619ac-128m
-  UPLOAD_COWTRANSFER: true
-  UPLOAD_WETRANSFER: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
 # 上传固件到 Github Releases
   UPLOAD_RELEASES: true
 # 上传固件到 Github Artifacts
