@@ -148,10 +148,10 @@ jobs:
         Firmware_Diy_Main
         #Firmware_Diy
       
-#     - name: Run Copy Config File
-#       run: |
-#         cp $GITHUB_WORKSPACE/ConfigFiles/$CONFIG_FILE openwrt/.config
-        
+    - name: Run Copy Config File
+      run: |
+       cp -rf ConfigFiles/$CONFIG_FILE openwrt/.config
+      
     - name: SSH Connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.SSH == 'true' && github.event.inputs.SSH  != 'false') || contains(github.event.action, 'SSH')
@@ -168,6 +168,7 @@ jobs:
         cd openwrt
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware_Diy_Other
+        ./scripts/feeds update -a > /dev/null 2>&1
         ./scripts/feeds install -a > /dev/null 2>&1
         make defconfig
         make download -j$(nproc)
