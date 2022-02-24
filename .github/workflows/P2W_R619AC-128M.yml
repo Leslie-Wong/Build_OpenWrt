@@ -183,9 +183,9 @@ jobs:
         #echo "FILE_DATE=$(date +"%Y%m%d_%H%M")" >> $GITHUB_ENV
         mkdir upload_files
         cd openwrt/bin
-        tar -zcvf ../../upload_files/packages_${{ env.FILE_DATE }}.tar.gz packages
-        tar -zcvf ../../upload_files/targets_${{ env.FILE_DATE }}.tar.gz targets
-        cp -rf targets/ipq40xx/generic/* ../../upload_files
+        tar -zcvf ../../upload_files/packages${{ env.FILE_DATE }}.tar.gz packages
+        tar -zcvf ../../upload_files/targets${{ env.FILE_DATE }}.tar.gz targets
+        #cp -rf targets/ipq40xx/generic/* ../../upload_files
         cd $GITHUB_WORKSPACE/upload_files
         echo "UPLOADFILES=$PWD" >> $GITHUB_ENV
         
@@ -213,15 +213,15 @@ jobs:
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wss --block 2621440 -s -p 64 --no-progress upload_files 2>&1 | tee wss.log
-        echo "::warning file=wenshushu.cn::$(cat wenshushu.log | grep https)"
-        echo "::set-output name=url::$(cat wenshushu.log | grep https | cut -f3 -d" ")"
+        echo "::warning file=wenshushu.cn::$(cat wss.log | grep https)"
+        echo "::set-output name=url::$(cat wss.log | grep https | cut -f3 -d" ")"
        
     - name: Upload firmware to trs
       id: trs
       if: env.UPLOAD_TRS == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer trs --block 2621440 -s -p 64 --no-progress upload_files 2>&1 | tee trs.log
+        ./transfer trs --no-progress upload_files 2>&1 | tee trs.log
         echo "::warning file=transfer.sh::$(cat trs.log | grep https)"
         echo "::set-output name=url::$(cat trs.log | grep https | cut -f3 -d" ")"
         
