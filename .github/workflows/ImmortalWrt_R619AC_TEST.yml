@@ -48,7 +48,7 @@ env:
   REMOVE_OLD_RELEASE: true
   REMOVE_WORKFLOW_RUNS: true
 # Name for upload to Release
-  UPLOAD_RELEASE_NAME: P2W_R619AC_AutoBuild
+  UPLOAD_RELEASE_NAME: AutoBuild-ImmortalWrt-P2W_R619AC-TEST
   FILE_DATE: $(date +"%Y%m%d_%H%M")
 # 删除无用文件以增加编译空间
   DELETE_USELESS_FILES: true
