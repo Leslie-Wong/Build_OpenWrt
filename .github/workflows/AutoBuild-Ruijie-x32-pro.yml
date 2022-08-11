@@ -33,7 +33,7 @@ env:
   DEFAULT_SOURCE: coolsnowwolf/lede:master
   # REPO_URL: https://github.com/coolsnowwolf/lede
   # REPO_BRANCH: master
-  CONFIG_FILE: x32-pro
+  CONFIG_FILE: Ruijie-x32-pro
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
 # 上传固件到 Github Releases
