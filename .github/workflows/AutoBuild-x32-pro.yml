@@ -4,7 +4,7 @@
 #   Author: Hyy2001X                                      #
 ###########################################################
 
-name: AutoBuild-X32-Pro
+name: AutoBuild-Ruijie-X32-Pro
 
 
 ### 以下内容请保持不变
@@ -29,7 +29,7 @@ on:
 
 ### 环境变量设置
 env:
-  DEFAULT_TARGET: d-team_newifi-d2
+  DEFAULT_TARGET: Ruijie-x32-pro
   DEFAULT_SOURCE: coolsnowwolf/lede:master
   # REPO_URL: https://github.com/coolsnowwolf/lede
   # REPO_BRANCH: master
