@@ -113,8 +113,8 @@ jobs:
 
     - name: Clone Build Script
       run: |
-        git clone https://github.com/Hyy2001X/AutoBuild-Actions.git
-        cd AutoBuild-Actions/
+        git clone https://github.com/Hyy2001X/AutoBuild-Actions-Template
+        cd AutoBuild-Actions-Template/
         mv * ../
         cd ../
         # sed -i 's/Author=AUTO/Author=LesLie.W/g' Scripts/AutoBuild_DiyScript.sh
