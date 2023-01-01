@@ -50,6 +50,7 @@ env:
   FILE_DATE: $(date +"%Y%m%d_%H%M")
 # 删除无用文件以增加编译空间
   DELETE_USELESS_FILES: true
+  TZ: Asia/Shanghai
   
 ### END
 
