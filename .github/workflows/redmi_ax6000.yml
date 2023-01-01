@@ -55,7 +55,7 @@ env:
 
 jobs:
   Compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     steps:
     - name: Maximize Build Space
